@@ -58,7 +58,7 @@ Every external call (CV, LLM, weather) goes through a typed adapter with an expl
 - `POST /api/garments` — upload image → CV tag → save. Returns the garment.
 - `GET /api/garments` — list wardrobe.
 - `PATCH /api/garments/:id` — correct tags (sets `tag_source='user_corrected'`).
-- `DELETE /api/garments/:id`
+- `DELETE /api/garments/:id` — **can fail by design.** `outfit_item.garment_id` is `on delete restrict`, so a garment that has appeared in any past outfit cannot be deleted; recommendation history must not be rewritten by a wardrobe edit. Return a conflict rather than a 500, and have the wardrobe UI surface it instead of assuming success. (A soft-delete flag on `garment` is the natural fix if users find this too restrictive.)
 - `GET /api/profile` · `PUT /api/profile` — body profile.
 - `GET /api/style-dna` — descriptors + weights for display.
 - `POST /api/recommend` — thin proxy: gathers context, forwards credentials, calls FastAPI, returns outfits.
