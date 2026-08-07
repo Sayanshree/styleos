@@ -6,23 +6,25 @@ The whole system hangs off these entities. Decide this before writing app code. 
 
 ```mermaid
 erDiagram
-  USER ||--|| BODY_PROFILE : has
-  USER ||--|| STYLE_DNA : has
-  USER ||--o{ GARMENT : owns
-  USER ||--o{ RECOMMENDATION : requests
+  APP_USER ||--|| BODY_PROFILE : has
+  APP_USER ||--|| STYLE_DNA : has
+  APP_USER ||--o{ GARMENT : owns
+  APP_USER ||--o{ RECOMMENDATION : requests
   RECOMMENDATION ||--o{ OUTFIT : returns
   OUTFIT ||--o{ OUTFIT_ITEM : contains
   GARMENT ||--o{ OUTFIT_ITEM : appears_in
   OUTFIT ||--o{ FEEDBACK_EVENT : rated_by
-  USER ||--o{ FEEDBACK_EVENT : generates
+  APP_USER ||--o{ FEEDBACK_EVENT : generates
 ```
 
 ## Tables
 
-### user
+### app_user
+The table is `app_user`, not `user` — `user` is a reserved keyword in Postgres and `create table user` is a syntax error. Renamed rather than permanently double-quoted. See `supabase/migrations/0001_init.sql`.
+
 | field | type | notes |
 |---|---|---|
-| id | uuid PK | Supabase auth id |
+| id | uuid PK/FK | `references auth.users(id)` — the Supabase auth id |
 | email | text | |
 | created_at | timestamptz | |
 
@@ -146,3 +148,4 @@ Swap `<=` for `>` to get the later window. `improvement = later - early`.
 - **`feedback_event` is append-only.** Never mutate; the timeline is what lets you show "acceptance rate improved after N interactions."
 - **The engine writes with the Supabase service-role key**, which bypasses RLS. Every engine query must therefore filter by the JWT-derived `user_id` explicitly, through the single `repository` module. RLS policies still apply to everything the web app reads directly.
 - **`embedding` is optional/future** — include the nullable column now so adding pgvector-based "similar item" later needs no migration pain.
+- **Deletes cascade along user ownership only.** Removing a user removes their body profile, Style DNA, wardrobe, recommendations, outfits and feedback. The single exception is `outfit_item.garment_id`, which is `on delete restrict`: a garment that appears in a past outfit cannot be deleted, so recommendation history stays intact for the evaluation queries. This is what makes `DELETE /api/garments/:id` a fallible call — see the architecture doc.
