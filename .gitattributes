@@ -1,0 +1,17 @@
+# Normalise line endings. Without this, committing from Windows produces CRLF
+# noise in diffs the moment the repo is touched on Linux — Vercel, Fly.io, CI,
+# and the Supabase CLI all run there.
+#
+# `text=auto` lets git detect text files and store them with LF in the repository.
+# `eol=lf` additionally forces LF in the working tree, so the files on disk match
+# what is committed and git stops reporting a conversion on every add.
+
+*       text=auto
+
+*.sql   text eol=lf
+*.md    text eol=lf
+*.py    text eol=lf
+*.ts    text eol=lf
+*.tsx   text eol=lf
+*.json  text eol=lf
+*.css   text eol=lf
