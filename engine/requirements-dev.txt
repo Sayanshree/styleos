@@ -1,0 +1,6 @@
+# Development tooling. Not installed in the deployed image.
+
+-r requirements.txt
+
+ruff>=0.8
+mypy>=1.13

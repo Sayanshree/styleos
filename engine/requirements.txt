@@ -1,0 +1,15 @@
+# Runtime dependencies for the StyleOS engine.
+# Dev tooling (ruff, mypy) lives in requirements-dev.txt so it stays out of the
+# deployed image.
+
+fastapi>=0.115
+uvicorn[standard]>=0.32
+pydantic>=2.9
+supabase>=2.31
+python-dotenv>=1.0
+pyjwt>=2.9
+
+# CV garment tagging (Gemini). Pinned exactly rather than floored like the rest:
+# this is a live third-party integration verified against this specific version,
+# and a silent SDK bump is not something to discover on a Fly deploy.
+google-genai==2.17.0

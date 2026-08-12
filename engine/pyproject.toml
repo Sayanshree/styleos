@@ -1,0 +1,39 @@
+# Tooling configuration for the engine. Dependencies live in requirements*.txt;
+# this file configures ruff and mypy only.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+# scripts/ predates this config and is linted separately; venv/ is not ours.
+exclude = ["venv", ".venv", "scripts"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # import sorting
+    "UP",   # pyupgrade
+    "B",    # bugbear
+    "SIM",  # simplify
+    "ANN",  # require type annotations
+    "RUF",  # ruff-specific
+]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["app", "repository", "adapters"]
+# `files` only applies when no path is given on the command line, so `mypy .`
+# would otherwise pull in scripts/ and venv/. exclude covers both invocations.
+# scripts/ predates this config and is not annotated; bring it in deliberately
+# rather than by accident.
+exclude = "^(venv|\\.venv|scripts)/"
+warn_unreachable = true
+warn_unused_ignores = true
+show_error_codes = true
+
+# Third-party packages without bundled type information.
+[[tool.mypy.overrides]]
+module = ["supabase.*", "dotenv.*", "jwt.*"]
+ignore_missing_imports = true

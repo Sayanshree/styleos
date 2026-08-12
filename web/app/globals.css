@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/*
+ * Mobile-first. Per docs/06 the visual polish budget goes to Home/Today and
+ * Request -> Recommendation, neither of which exists yet — this scaffold stays
+ * deliberately plain so it is obvious nothing here is a designed screen.
+ */
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
