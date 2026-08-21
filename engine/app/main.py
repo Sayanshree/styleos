@@ -17,7 +17,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 
-from app.routers import feedback, health, metrics, recommend
+from app.routers import feedback, garments, health, metrics, recommend
 
 app = FastAPI(
     title="StyleOS Engine",
@@ -29,6 +29,7 @@ app = FastAPI(
 )
 
 app.include_router(health.router)
+app.include_router(garments.router)
 app.include_router(recommend.router)
 app.include_router(feedback.router)
 app.include_router(metrics.router)

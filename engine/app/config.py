@@ -26,9 +26,13 @@ ENV_PATH: Final[Path] = Path(__file__).resolve().parents[2] / ".env"
 REQUIRED_VARS: Final[tuple[str, ...]] = (
     "SUPABASE_URL",
     "SUPABASE_SERVICE_ROLE_KEY",
-    "SUPABASE_JWT_SECRET",
     "SERVICE_SHARED_TOKEN",
+    "GEMINI_API_KEY",
 )
+
+#: Supabase Storage bucket holding garment photos. Private; images are served
+#: through short-lived signed URLs minted by the engine.
+GARMENT_BUCKET: Final[str] = "garments"
 
 
 class ConfigError(RuntimeError):
@@ -42,12 +46,16 @@ class Settings:
     `supabase_service_role_key` bypasses RLS entirely and `service_shared_token`
     is the BFF's proof of identity — neither may ever be logged or returned in a
     response body.
+
+    JWT verification uses Supabase's JWKS endpoint (derived from `supabase_url`)
+    rather than a shared secret. Supabase now signs user tokens with ECC (P-256),
+    an asymmetric scheme where the public key is published at /auth/v1/keys.
     """
 
     supabase_url: str
     supabase_service_role_key: str
-    supabase_jwt_secret: str
     service_shared_token: str
+    gemini_api_key: str
 
 
 def load_settings() -> Settings:
@@ -67,8 +75,8 @@ def load_settings() -> Settings:
     return Settings(
         supabase_url=os.environ["SUPABASE_URL"],
         supabase_service_role_key=os.environ["SUPABASE_SERVICE_ROLE_KEY"],
-        supabase_jwt_secret=os.environ["SUPABASE_JWT_SECRET"],
         service_shared_token=os.environ["SERVICE_SHARED_TOKEN"],
+        gemini_api_key=os.environ["GEMINI_API_KEY"],
     )
 
 

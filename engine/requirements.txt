@@ -4,10 +4,12 @@
 
 fastapi>=0.115
 uvicorn[standard]>=0.32
+# Required by FastAPI to parse multipart uploads (garment images).
+python-multipart>=0.0.9
 pydantic>=2.9
 supabase>=2.31
 python-dotenv>=1.0
-pyjwt>=2.9
+httpx>=0.27
 
 # CV garment tagging (Gemini). Pinned exactly rather than floored like the rest:
 # this is a live third-party integration verified against this specific version,

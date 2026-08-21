@@ -131,7 +131,7 @@ def ensure_garment(sb, user_id):
             {
                 "user_id": user_id,
                 "image_url": "https://example.invalid/rls-test-garment.png",
-                "category": "top",
+                "category": "tops",
                 "color_primary": {"h": 210, "s": 40, "l": 55},
                 "formality": 3,
                 "seasons": ["summer"],

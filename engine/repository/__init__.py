@@ -22,6 +22,61 @@ See docs/04-architecture-api.md, "Trust boundary".
 
 from __future__ import annotations
 
-from repository.queries import create_recommendation, get_garments, record_feedback
+from repository.garments import (
+    GarmentInUse,
+    GarmentNotFound,
+    GarmentRow,
+    delete_garment,
+    delete_image,
+    find_by_image_hash,
+    get_garment,
+    insert_garment,
+    list_garments,
+    signed_url,
+    update_garment,
+    upload_image,
+)
+from repository.profile import (
+    get_body_profile,
+    get_style_dna,
+    list_garments_for_scoring,
+    update_style_dna,
+    upsert_body_profile,
+)
+from repository.queries import (
+    OutfitInsert,
+    create_recommendation,
+    get_outfits_more,
+    insert_outfits,
+    record_feedback,
+    update_recommendation_latency,
+)
 
-__all__ = ["create_recommendation", "get_garments", "record_feedback"]
+__all__ = [
+    # garments
+    "GarmentInUse",
+    "GarmentNotFound",
+    "GarmentRow",
+    "delete_garment",
+    "delete_image",
+    "find_by_image_hash",
+    "get_garment",
+    "insert_garment",
+    "list_garments",
+    "signed_url",
+    "update_garment",
+    "upload_image",
+    # profile + style DNA
+    "get_body_profile",
+    "get_style_dna",
+    "list_garments_for_scoring",
+    "update_style_dna",
+    "upsert_body_profile",
+    # recommendations + outfits
+    "OutfitInsert",
+    "create_recommendation",
+    "get_outfits_more",
+    "insert_outfits",
+    "record_feedback",
+    "update_recommendation_latency",
+]
